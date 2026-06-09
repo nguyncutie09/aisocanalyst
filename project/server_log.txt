@@ -1,0 +1,137 @@
+INFO:     Started server process [22468]
+INFO:     Waiting for application startup.
+2026-06-09 10:29:10 [INFO] app.main: ============================================================
+2026-06-09 10:29:10 [INFO] app.main:   UEBA - User & Entity Behavior Analytics v2.0.0
+2026-06-09 10:29:10 [INFO] app.main: ============================================================
+2026-06-09 10:29:10 [INFO] app.api.routes: Loaded pre-trained anomaly models
+2026-06-09 10:29:10 [INFO] app.api.routes: Loaded pre-trained classifier models
+2026-06-09 10:29:10 [INFO] app.api.routes: Loaded label encoders from C:\Users\Nguyen\project\data\models\label_encoders.pkl
+2026-06-09 10:29:10 [INFO] app.api.routes: UEBA models initialized
+2026-06-09 10:29:10 [INFO] app.main: Server starting on http://0.0.0.0:8000
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+✓ Models loaded from C:\Users\Nguyen\project\data\models
+✓ Classifier loaded from C:\Users\Nguyen\project\data\models
+INFO:     127.0.0.1:50694 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50697 - "GET /api/v1/health HTTP/1.1" 200 OK
+2026-06-09 10:30:21 [INFO] app.api.routes: Generating training data...
+2026-06-09 10:30:22 [INFO] app.api.routes: Saved label encoders to C:\Users\Nguyen\project\data\models\label_encoders.pkl
+2026-06-09 10:30:22 [INFO] app.api.routes: Training anomaly detectors...
+2026-06-09 10:30:35 [INFO] app.api.routes: Training attack classifier...
+2026-06-09 10:30:37 [INFO] app.api.routes: Training complete in 16.12s, accuracy=1.0000
+2026-06-09 10:30:38 [INFO] app.api.routes: Loaded pre-trained anomaly models
+2026-06-09 10:30:38 [INFO] app.api.routes: Loaded pre-trained classifier models
+2026-06-09 10:30:38 [INFO] app.api.routes: Loaded label encoders from C:\Users\Nguyen\project\data\models\label_encoders.pkl
+2026-06-09 10:30:38 [INFO] app.api.routes: UEBA models initialized
+[Anomaly] Training Isolation Forest...
+  ✓ IsolationForest trained (dim=18)
+[Anomaly] Training Deep Isolation Forest...
+  Epoch 10/20 | Loss: 0.000087
+  Epoch 20/20 | Loss: 0.000057
+  ✓ DeepIsolationForest trained
+[Anomaly] Training VAE Autoencoder...
+  Epoch 10/20 | VAE Loss: 0.206794
+  Epoch 20/20 | VAE Loss: 0.185807
+  ✓ VAE Autoencoder trained
+✓ Models saved to C:\Users\Nguyen\project\data\models
+[Classifier] Training XGBoost attack classifier (8 classes)...
+  ✓ Attack classifier | Validation accuracy: 1.0000
+[Classifier] Training XGBoost tactic classifier (7 classes)...
+  ✓ Tactic classifier | Validation accuracy: 1.0000
+✓ Classifier saved to C:\Users\Nguyen\project\data\models
+✓ Models loaded from C:\Users\Nguyen\project\data\models
+✓ Classifier loaded from C:\Users\Nguyen\project\data\models
+INFO:     127.0.0.1:50699 - "POST /api/v1/train HTTP/1.1" 200 OK
+2026-06-09 10:30:40 [ERROR] app.api.routes: Classification error: 'str' object has no attribute 'get'
+INFO:     127.0.0.1:50362 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+2026-06-09 10:30:42 [ERROR] app.api.routes: Classification error: 'str' object has no attribute 'get'
+INFO:     127.0.0.1:50364 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+2026-06-09 10:30:44 [ERROR] app.api.routes: Classification error: 'str' object has no attribute 'get'
+INFO:     127.0.0.1:50366 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57120 - "GET /api/v1/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57122 - "GET /api/v1/mitre/techniques HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52645 - "GET /api/v1/dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52647 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52649 - "GET /dashboard/alerts HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54177 - "GET /api/v1/health HTTP/1.1" 200 OK
+2026-06-09 10:31:23 [INFO] app.api.routes: Generating training data...
+2026-06-09 10:31:24 [INFO] app.api.routes: Saved label encoders to C:\Users\Nguyen\project\data\models\label_encoders.pkl
+2026-06-09 10:31:24 [INFO] app.api.routes: Training anomaly detectors...
+2026-06-09 10:31:38 [INFO] app.api.routes: Training attack classifier...
+2026-06-09 10:31:42 [INFO] app.api.routes: Training complete in 19.04s, accuracy=1.0000
+2026-06-09 10:31:42 [INFO] app.api.routes: Loaded pre-trained anomaly models
+2026-06-09 10:31:42 [INFO] app.api.routes: Loaded pre-trained classifier models
+2026-06-09 10:31:42 [INFO] app.api.routes: Loaded label encoders from C:\Users\Nguyen\project\data\models\label_encoders.pkl
+2026-06-09 10:31:42 [INFO] app.api.routes: UEBA models initialized
+[Anomaly] Training Isolation Forest...
+  ✓ IsolationForest trained (dim=18)
+[Anomaly] Training Deep Isolation Forest...
+  Epoch 10/20 | Loss: 0.000064
+  Epoch 20/20 | Loss: 0.000046
+  ✓ DeepIsolationForest trained
+[Anomaly] Training VAE Autoencoder...
+  Epoch 10/20 | VAE Loss: 0.209931
+  Epoch 20/20 | VAE Loss: 0.188059
+  ✓ VAE Autoencoder trained
+✓ Models saved to C:\Users\Nguyen\project\data\models
+[Classifier] Training XGBoost attack classifier (8 classes)...
+  ✓ Attack classifier | Validation accuracy: 1.0000
+[Classifier] Training XGBoost tactic classifier (7 classes)...
+  ✓ Tactic classifier | Validation accuracy: 1.0000
+✓ Classifier saved to C:\Users\Nguyen\project\data\models
+✓ Models loaded from C:\Users\Nguyen\project\data\models
+✓ Classifier loaded from C:\Users\Nguyen\project\data\models
+INFO:     127.0.0.1:54181 - "POST /api/v1/train HTTP/1.1" 200 OK
+2026-06-09 10:31:45 [ERROR] app.api.routes: Classification error: 'str' object has no attribute 'get'
+INFO:     127.0.0.1:55461 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+2026-06-09 10:31:47 [ERROR] app.api.routes: Classification error: 'str' object has no attribute 'get'
+INFO:     127.0.0.1:63881 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+2026-06-09 10:31:49 [ERROR] app.api.routes: Classification error: 'str' object has no attribute 'get'
+INFO:     127.0.0.1:63478 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53426 - "GET /api/v1/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53428 - "GET /api/v1/mitre/techniques HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62975 - "GET /api/v1/dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52045 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52047 - "GET /dashboard/alerts HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50809 - "GET /api/v1/health HTTP/1.1" 200 OK
+2026-06-09 10:32:32 [INFO] app.api.routes: Generating training data...
+2026-06-09 10:32:33 [INFO] app.api.routes: Saved label encoders to C:\Users\Nguyen\project\data\models\label_encoders.pkl
+2026-06-09 10:32:33 [INFO] app.api.routes: Training anomaly detectors...
+2026-06-09 10:32:41 [INFO] app.api.routes: Training attack classifier...
+2026-06-09 10:32:43 [INFO] app.api.routes: Training complete in 11.05s, accuracy=1.0000
+2026-06-09 10:32:43 [INFO] app.api.routes: Loaded pre-trained anomaly models
+2026-06-09 10:32:44 [INFO] app.api.routes: Loaded pre-trained classifier models
+2026-06-09 10:32:44 [INFO] app.api.routes: Loaded label encoders from C:\Users\Nguyen\project\data\models\label_encoders.pkl
+2026-06-09 10:32:44 [INFO] app.api.routes: UEBA models initialized
+[Anomaly] Training Isolation Forest...
+  ✓ IsolationForest trained (dim=18)
+[Anomaly] Training Deep Isolation Forest...
+  Epoch 10/20 | Loss: 0.000104
+  Epoch 20/20 | Loss: 0.000083
+  ✓ DeepIsolationForest trained
+[Anomaly] Training VAE Autoencoder...
+  Epoch 10/20 | VAE Loss: 0.206495
+  Epoch 20/20 | VAE Loss: 0.186371
+  ✓ VAE Autoencoder trained
+✓ Models saved to C:\Users\Nguyen\project\data\models
+[Classifier] Training XGBoost attack classifier (8 classes)...
+  ✓ Attack classifier | Validation accuracy: 1.0000
+[Classifier] Training XGBoost tactic classifier (7 classes)...
+  ✓ Tactic classifier | Validation accuracy: 1.0000
+✓ Classifier saved to C:\Users\Nguyen\project\data\models
+✓ Models loaded from C:\Users\Nguyen\project\data\models
+✓ Classifier loaded from C:\Users\Nguyen\project\data\models
+INFO:     127.0.0.1:50811 - "POST /api/v1/train HTTP/1.1" 200 OK
+2026-06-09 10:32:46 [ERROR] app.api.routes: Classification error: 'str' object has no attribute 'get'
+INFO:     127.0.0.1:50816 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+2026-06-09 10:32:48 [ERROR] app.api.routes: Classification error: 'str' object has no attribute 'get'
+INFO:     127.0.0.1:50818 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+2026-06-09 10:32:50 [ERROR] app.api.routes: Classification error: 'str' object has no attribute 'get'
+INFO:     127.0.0.1:50820 - "POST /api/v1/analyze HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50822 - "GET /api/v1/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50824 - "GET /api/v1/mitre/techniques HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50826 - "GET /api/v1/dashboard/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50828 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50830 - "GET /alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50834 - "GET /analytics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50836 - "GET /mitre HTTP/1.1" 200 OK
