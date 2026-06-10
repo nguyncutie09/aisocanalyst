@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% block title %}Settings - UEBA{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h2>Settings</h2>
+        <div class="subtitle">System configuration and model management</div>
+    </div>
+</div>
+
+<div class="grid grid-2 fade-in">
+    <!-- ─── Model Training ─── -->
+    <div class="card">
+        <div class="card-title">Model Training</div>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+            Train or retrain ML models using synthetic data or uploaded labeled logs.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+            <button class="btn btn-primary" onclick="trainModels()">
+                <i class="fas fa-brain"></i> Train Models (Synthetic Data)
+            </button>
+            <div style="display:flex;gap:8px;align-items:center;">
+                <input type="text" id="trainFileInput" placeholder="/path/to/labeled_data.parquet"
+                       style="flex:1;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:8px;padding:8px 12px;color:var(--text-primary);font-size:13px;">
+                <button class="btn btn-outline btn-sm" onclick="trainFromFile()">
+                    <i class="fas fa-upload"></i> Train
+                </button>
+            </div>
+        </div>
+        <div id="trainResult" style="margin-top:16px;padding:12px;border-radius:8px;font-size:13px;display:none;"></div>
+    </div>
+
+    <!-- ─── System Status ─── -->
+    <div class="card">
+        <div class="card-title">System Status</div>
+        <div id="sysStatusContent">
+            <p style="color:var(--text-secondary);font-size:13px;">Loading...</p>
+        </div>
+    </div>
+</div>
+
+<!-- ─── Thresholds ─── -->
+<div class="card fade-in">
+    <div class="card-title">Risk Thresholds</div>
+    <div class="grid grid-4" style="margin-top:8px;">
+        <div>
+            <label style="font-size:12px;color:var(--text-secondary);display:block;margin-bottom:4px;">Critical ≥</label>
+            <input type="number" id="threshCritical" value="85" min="0" max="100"
+                   style="width:100%;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:8px;padding:8px 12px;color:var(--text-primary);">
+        </div>
+        <div>
+            <label style="font-size:12px;color:var(--text-secondary);display:block;margin-bottom:4px;">High ≥</label>
+            <input type="number" id="threshHigh" value="65" min="0" max="100"
+                   style="width:100%;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:8px;padding:8px 12px;color:var(--text-primary);">
+        </div>
+        <div>
+            <label style="font-size:12px;color:var(--text-secondary);display:block;margin-bottom:4px;">Medium ≥</label>
+            <input type="number" id="threshMedium" value="40" min="0" max="100"
+                   style="width:100%;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:8px;padding:8px 12px;color:var(--text-primary);">
+        </div>
+        <div>
+            <label style="font-size:12px;color:var(--text-secondary);display:block;margin-bottom:4px;">Low ≥</label>
+            <input type="number" id="threshLow" value="20" min="0" max="100"
+                   style="width:100%;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:8px;padding:8px 12px;color:var(--text-primary);">
+        </div>
+    </div>
+</div>
+
+<!-- API Reference -->
+<div class="card fade-in">
+    <div class="card-title">API Reference</div>
+    <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;font-family:monospace;">
+        <div><span style="color:var(--accent-cyan)">POST</span> /api/v1/analyze          - Analyze a single event</div>
+        <div><span style="color:var(--accent-cyan)">POST</span> /api/v1/analyze/batch    - Analyze batch of events</div>
+        <div><span style="color:var(--accent-green)">GET</span>  /api/v1/alerts           - Get alerts</div>
+        <div><span style="color:var(--accent-green)">GET</span>  /api/v1/dashboard/summary - Dashboard data</div>
+        <div><span style="color:var(--accent-green)">GET</span>  /api/v1/mitre/techniques  - MITRE techniques</div>
+        <div><span style="color:var(--accent-green)">GET</span>  /api/v1/status            - System status</div>
+        <div><span style="color:var(--accent-cyan)">POST</span> /api/v1/train             - Train models</div>
+        <div style="margin-top:8px;"><a href="/docs" target="_blank" style="color:var(--accent-cyan)">→ Full API Docs (Swagger)</a></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function loadStatus() {
+    const status = await apiFetch('/api/v1/status');
+    const container = document.getElementById('sysStatusContent');
+    if (!status) {
+        container.innerHTML = '<p style="color:var(--risk-critical);font-size:13px;">Failed to connect</p>';
+        return;
+    }
+    container.innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;">
+            <div><span style="color:var(--text-secondary)">Isolation Forest:</span> ${status.isolation_forest ? '✅' : '❌'}</div>
+            <div><span style="color:var(--text-secondary)">Deep Isolation Forest:</span> ${status.deep_isolation_forest ? '✅' : '❌'}</div>
+            <div><span style="color:var(--text-secondary)">VAE Autoencoder:</span> ${status.autoencoder_vae ? '✅' : '❌'}</div>
+            <div><span style="color:var(--text-secondary)">Transformer:</span> ${status.sequence_transformer ? '✅' : '❌'}</div>
+            <div><span style="color:var(--text-secondary)">XGBoost Attack:</span> ${status.xgboost_attack_classifier ? '✅' : '❌'}</div>
+            <div><span style="color:var(--text-secondary)">XGBoost Tactic:</span> ${status.xgboost_tactic_classifier ? '✅' : '❌'}</div>
+            <div style="grid-column:1/-1;border-top:1px solid var(--border-color);padding-top:8px;margin-top:4px;">
+                <span style="color:var(--text-secondary)">Events processed:</span> <strong>${status.total_events_processed}</strong>
+            </div>
+        </div>
+    `;
+}
+
+async function trainModels() {
+    const btn = event.target;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Training...';
+
+    const result = document.getElementById('trainResult');
+    result.style.display = 'block';
+    result.innerHTML = '<p style="color:var(--accent-cyan)">Training started... This may take a few minutes.</p>';
+
+    const res = await apiFetch('/api/v1/train', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ epochs: 30, learning_rate: 0.001, batch_size: 256, force_retrain: true })
+    });
+
+    if (res) {
+        result.innerHTML = `
+            <div style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:12px;">
+                <strong style="color:var(--risk-low)">✓ Training Complete</strong><br>
+                Models: ${res.models_trained.join(', ')}<br>
+                Time: ${res.training_time_seconds}s<br>
+                Accuracy: ${(res.metrics.accuracy * 100).toFixed(1)}%
+            </div>
+        `;
+        loadStatus();
+    } else {
+        result.innerHTML = '<p style="color:var(--risk-critical)">Training failed. Check server logs.</p>';
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-brain"></i> Train Models (Synthetic Data)';
+}
+
+async function trainFromFile() {
+    const filepath = document.getElementById('trainFileInput').value;
+    if (!filepath) { alert('Please enter a file path'); return; }
+
+    const result = document.getElementById('trainResult');
+    result.style.display = 'block';
+    result.innerHTML = '<p style="color:var(--accent-cyan)">Training from file...</p>';
+
+    const res = await apiFetch('/api/v1/train/from-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filepath })
+    });
+
+    if (res) {
+        result.innerHTML = `<p style="color:var(--risk-low)">✓ Trained on ${res.n_samples} samples</p>`;
+        loadStatus();
+    } else {
+        result.innerHTML = '<p style="color:var(--risk-critical)">Training failed</p>';
+    }
+}
+
+loadStatus();
+</script>
+{% endblock %}

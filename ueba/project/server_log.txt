@@ -1,0 +1,10 @@
+2026-06-10 09:53:28 [INFO] app.main: ============================================================
+2026-06-10 09:53:28 [INFO] app.main:   UEBA - User & Entity Behavior Analytics v2.0.0
+2026-06-10 09:53:28 [INFO] app.main: ============================================================
+2026-06-10 09:53:28 [WARNING] app.api.routes: No pre-trained anomaly models: 'charmap' codec can't encode character '\u2713' in position 0: character maps to <undefined>
+2026-06-10 09:53:28 [WARNING] app.api.routes: No pre-trained classifier models: 'charmap' codec can't encode character '\u2713' in position 0: character maps to <undefined>
+2026-06-10 09:53:28 [INFO] app.api.routes: Loaded label encoders from C:\Users\Nguyen\project\data\models\label_encoders.pkl
+2026-06-10 09:53:28 [INFO] app.api.routes: UEBA models initialized
+2026-06-10 09:53:28 [INFO] app.main: Server starting on http://0.0.0.0:8000
+ERROR:    [Errno 10048] error while attempting to bind on address ('127.0.0.1', 8000): [winerror 10048] only one usage of each socket address (protocol/network address/port) is normally permitted
+2026-06-10 09:53:28 [INFO] app.main: Shutting down UEBA system...
